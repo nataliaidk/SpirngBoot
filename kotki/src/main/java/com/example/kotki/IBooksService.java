@@ -8,7 +8,7 @@ public interface IBooksService {
     public abstract Book getBook(int id);
 
     //create - 1 post
-    public abstract Book addBook(String title, String author, int pages);
+    public abstract Book addBook(String title, Author author, int pages);
 
     //update - put, not patch
     public abstract Book updateBook(int id, Book book);

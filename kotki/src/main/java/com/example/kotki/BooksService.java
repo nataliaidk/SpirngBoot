@@ -1,6 +1,10 @@
 package com.example.kotki;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,10 +13,14 @@ public class BooksService implements IBooksService {
     private static List<Book> booksRepo = new ArrayList<>();
     private static int currentId = 3;
 
-    static {
-        booksRepo.add(new Book(1,"Potop", "Henryk Sienkiewicz", 936));
-        booksRepo.add(new Book(2,"Wesele", "Stanisław Reymont", 150));
-        booksRepo.add(new Book(3,"Dziady", "Adam Mickiewicz", 292));
+    @Autowired
+    private AuthorService authorService;
+
+    @PostConstruct
+    private void initBooks() {
+        booksRepo.add(new Book(1, "Potop", authorService.getAuthor(1), 936));
+        booksRepo.add(new Book(2, "Wesele", authorService.getAuthor(2), 150));
+        booksRepo.add(new Book(3, "Dziady", authorService.getAuthor(3), 292));
     }
 
     //read - 2 gets
@@ -20,6 +28,7 @@ public class BooksService implements IBooksService {
     public Collection<Book> getBooks() {
         return booksRepo;
     }
+
     @Override
     public Book getBook(int id) {
         return booksRepo.stream()
@@ -31,7 +40,7 @@ public class BooksService implements IBooksService {
     //create - 1 post
     //zabezpieczenie/walidacja?
     @Override
-    public Book addBook(String title, String author, int pages) {
+    public Book addBook(String title, Author author, int pages) {
         Book newBook = new Book(++currentId, title, author, pages);
         booksRepo.add(newBook);
         return newBook;
@@ -56,12 +65,6 @@ public class BooksService implements IBooksService {
     //delete - delete
     @Override
     public boolean deleteBook(int id) {
-        for (int i = 0; i < booksRepo.size(); i++) {
-            if (booksRepo.get(i).getId() == id) {
-                booksRepo.remove(i);
-                return true;
-            }
-        }
-        return false;
+        return booksRepo.removeIf(b -> b.getId() == id);
     }
 }
