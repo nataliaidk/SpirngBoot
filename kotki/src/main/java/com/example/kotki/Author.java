@@ -10,7 +10,7 @@ public class Author {
         this.id = id;
         this.name = name;
     }
-
+    public Author(){}
     public int getId() {return id;}
     
     public String getName() {return name;}
