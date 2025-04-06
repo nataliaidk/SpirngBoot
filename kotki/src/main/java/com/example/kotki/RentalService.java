@@ -1,12 +1,18 @@
 package com.example.kotki;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class RentalService implements IRentalService {
+
+    @Autowired
+    IReaderService readerService;
+
+    @Autowired
+    IBooksService bookService;
+
     private static List<Rental> rentalsRepo = new ArrayList<>();
     private static int currentId = 0;
 
@@ -21,19 +27,33 @@ public class RentalService implements IRentalService {
                 .orElse(null);
     }
 
-    public Rental addRental(Rental rental) {
-        rental = new Rental(++currentId, rental.getReader(), rental.getBook(), rental.getRentDate(), rental.getReturnDate());
+    public Rental addRental(RentalRequestDTO dto) {
+        Reader reader = readerService.getReader(dto.getReaderId());
+        Book book = bookService.getBook(dto.getBookId());
+
+        if (reader == null || book == null) {
+            return null; // można też rzucić wyjątek
+        }
+
+        Rental rental = new Rental(++currentId, reader, book, dto.getRentDate(), dto.getReturnDate());
         rentalsRepo.add(rental);
         return rental;
     }
 
-    public Rental updateRental(int id, Rental rental) {
+    public Rental updateRental(int id, RentalRequestDTO dto) {
+        Reader reader = readerService.getReader(dto.getReaderId());
+        Book book = bookService.getBook(dto.getBookId());
+
+        if (reader == null || book == null) {
+            return null;
+        }
+
         for (Rental r : rentalsRepo) {
             if (r.getId() == id) {
-                r.setReader(rental.getReader());
-                r.setBook(rental.getBook());
-                r.setRentDate(rental.getRentDate());
-                r.setReturnDate(rental.getReturnDate());
+                r.setReader(reader);
+                r.setBook(book);
+                r.setRentDate(dto.getRentDate());
+                r.setReturnDate(dto.getReturnDate());
                 return r;
             }
         }

@@ -7,9 +7,9 @@ public interface IRentalService {
 
     Rental getRental(int id);
 
-    Rental addRental(Rental rental);
+    Rental addRental(RentalRequestDTO dto);
 
-    Rental updateRental(int id, Rental rental);
+    Rental updateRental(int id, RentalRequestDTO rental);
 
     boolean deleteRental(int id);
 }

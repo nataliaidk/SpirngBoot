@@ -12,38 +12,44 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Books Controller", description = "Operations pertaining to books")
 public class BooksController {
     @Autowired
-    IBooksService booksService;
+    IBooksService bookService;
 
-    @Operation(summary = "Get all books")
-    @GetMapping
-    public ResponseEntity<Object> getBooks(){
-        return new ResponseEntity<>(booksService.getBooks(), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Get a book by ID")
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getBook(@PathVariable("id") int id){
-        return new ResponseEntity<>(booksService.getBook(id), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Add a new book")
+    @Operation(summary = "Add a new book (with existing author)")
     @PostMapping
-    public ResponseEntity<Object> addBook(@RequestBody Book book) {
-        Book savedBook = booksService.addBook(book.getTitle(), book.getAuthor(), book.getPages());
-        return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
+    public ResponseEntity<Object> addBook(@RequestBody BookRequestDTO dto) {
+        Book book = bookService.addBook(dto);
+        return book != null
+                ? new ResponseEntity<>(book, HttpStatus.CREATED)
+                : new ResponseEntity<>("Author not found", HttpStatus.BAD_REQUEST);
     }
 
     @Operation(summary = "Update a book")
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> updateBook(@PathVariable int id, @RequestBody Book book) {
-        Book updatedBook = booksService.updateBook(id, book);
-        return updatedBook != null ? ResponseEntity.ok(updatedBook) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateBook(@PathVariable int id, @RequestBody BookRequestDTO dto) {
+        Book updated = bookService.updateBook(id, dto);
+        return updated != null
+                ? ResponseEntity.ok(updated)
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Author not found");
     }
 
-    @Operation(summary = "Delete a book")
-    @DeleteMapping(value = "/{id}")
+    @GetMapping
+    public ResponseEntity<Object> getAllBooks() {
+        return new ResponseEntity<>(bookService.getBooks(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getBook(@PathVariable int id) {
+        Book book = bookService.getBook(id);
+        return book != null
+                ? new ResponseEntity<>(book, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable int id) {
-        boolean deletedBook = booksService.deleteBook(id);
-        return deletedBook ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        boolean deleted = bookService.deleteBook(id);
+        return deleted
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

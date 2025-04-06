@@ -39,22 +39,29 @@ public class BooksService implements IBooksService {
 
     //create - 1 post
     //zabezpieczenie/walidacja?
-    @Override
-    public Book addBook(String title, Author author, int pages) {
-        Book newBook = new Book(++currentId, title, author, pages);
-        booksRepo.add(newBook);
-        return newBook;
+    public Book addBook(BookRequestDTO dto) {
+        Author author = authorService.getAuthor(dto.getAuthorId());
+        if (author == null) {
+            return null;
+        }
+
+        Book book = new Book(++currentId, dto.getTitle(), author, dto.getPages());
+        booksRepo.add(book);
+        return book;
     }
 
-    //update - put, not patch
-    @Override
-    public Book updateBook(int id, Book book) {
-        for (Book existingBook : booksRepo) {
-            if (existingBook.getId() == id) { //keep id
-                existingBook.setTitle(book.getTitle());
-                existingBook.setAuthor(book.getAuthor());
-                existingBook.setPages(book.getPages());
-                return existingBook;
+    public Book updateBook(int id, BookRequestDTO dto) {
+        Author author = authorService.getAuthor(dto.getAuthorId());
+        if (author == null) {
+            return null;
+        }
+
+        for (Book b : booksRepo) {
+            if (b.getId() == id) {
+                b.setTitle(dto.getTitle());
+                b.setAuthor(author);
+                b.setPages(dto.getPages());
+                return b;
             }
         }
         return null;
