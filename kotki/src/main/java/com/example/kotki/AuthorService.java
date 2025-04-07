@@ -1,5 +1,4 @@
 package com.example.kotki;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,37 +6,37 @@ import java.util.List;
 
 @Service
 public class AuthorService implements IAuthorService {
-    private static List<Author> authorsRepo = new ArrayList<>();
+    private static List<Authors> authorsRepo = new ArrayList<>();
     private static int currentId = 3;
 
     static {
-        authorsRepo.add(new Author(1, "Henryk Sienkiewicz"));
-        authorsRepo.add(new Author(2, "Stanisław Reymont"));
-        authorsRepo.add(new Author(3, "Adam Mickiewicz"));
+        authorsRepo.add(new Authors(1, "Henryk Sienkiewicz"));
+        authorsRepo.add(new Authors(2, "Stanisław Reymont"));
+        authorsRepo.add(new Authors(3, "Adam Mickiewicz"));
     }
 
-    public Collection<Author> getAuthors() {
+    public Collection<Authors> getAuthors() {
         return authorsRepo;
     }
 
-    public Author getAuthor(int id) {
+    public Authors getAuthor(int id) {
         return authorsRepo.stream()
                 .filter(a -> a.getId() == id)
                 .findAny()
                 .orElse(null);
     }
 
-    public Author addAuthor(String name) {
-        Author newAuthor = new Author(++currentId, name);
-        authorsRepo.add(newAuthor);
-        return newAuthor;
+    public Authors addAuthor(String name) {
+        Authors newAuthors = new Authors(++currentId, name);
+        authorsRepo.add(newAuthors);
+        return newAuthors;
     }
 
-    public Author updateAuthor(int id, Author author) {
-        for (Author existingAuthor : authorsRepo) {
-            if(existingAuthor.getId() == id) {
-                existingAuthor.setName(author.getName());
-                return existingAuthor;
+    public Authors updateAuthor(int id, Authors authors) {
+        for (Authors existingAuthors : authorsRepo) {
+            if(existingAuthors.getId() == id) {
+                existingAuthors.setName(authors.getName());
+                return existingAuthors;
             }
         }
         return null;

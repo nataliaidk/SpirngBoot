@@ -7,36 +7,36 @@ import java.util.List;
 
 @Service
 public class ReaderService implements IReaderService {
-    private static List<Reader> readersRepo = new ArrayList<>();
+    private static List<Readers> readersRepo = new ArrayList<>();
     private static int currentId = 3;
 
     static {
-        readersRepo.add(new Reader(1, "Jan Kowalski"));
-        readersRepo.add(new Reader(2, "Anna Nowak"));
-        readersRepo.add(new Reader(3, "Piotr Zieliński"));
+        readersRepo.add(new Readers(1, "Jan Kowalski"));
+        readersRepo.add(new Readers(2, "Anna Nowak"));
+        readersRepo.add(new Readers(3, "Piotr Zieliński"));
     }
 
-    public Collection<Reader> getReaders() {
+    public Collection<Readers> getReaders() {
         return readersRepo;
     }
 
-    public Reader getReader(int id) {
+    public Readers getReader(int id) {
         return readersRepo.stream()
                 .filter(r -> r.getId() == id)
                 .findAny()
                 .orElse(null);
     }
 
-    public Reader addReader(String name) {
-        Reader newReader = new Reader(++currentId, name);
-        readersRepo.add(newReader);
-        return newReader;
+    public Readers addReader(String name) {
+        Readers newReaders = new Readers(++currentId, name);
+        readersRepo.add(newReaders);
+        return newReaders;
     }
 
-    public Reader updateReader(int id, Reader reader) {
-        for (Reader existing : readersRepo) {
+    public Readers updateReader(int id, Readers readers) {
+        for (Readers existing : readersRepo) {
             if (existing.getId() == id) {
-                existing.setName(reader.getName());
+                existing.setName(readers.getName());
                 return existing;
             }
         }

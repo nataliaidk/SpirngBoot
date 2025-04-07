@@ -24,25 +24,25 @@ public class AuthorController {
     @Operation(summary = "Get an author by ID")
     @GetMapping("/{id}")
     public ResponseEntity<Object> getAuthor(@PathVariable int id) {
-        Author author = authorService.getAuthor(id);
-        return author != null
-                ? new ResponseEntity<>(author, HttpStatus.OK)
+        Authors authors = authorService.getAuthor(id);
+        return authors != null
+                ? new ResponseEntity<>(authors, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Add a new author")
     @PostMapping
-    public ResponseEntity<Object> addAuthor(@RequestBody Author author) {
-        Author savedAuthor = authorService.addAuthor(author.getName());
-        return new ResponseEntity<>(savedAuthor, HttpStatus.CREATED);
+    public ResponseEntity<Object> addAuthor(@RequestBody Authors authors) {
+        Authors savedAuthors = authorService.addAuthor(authors.getName());
+        return new ResponseEntity<>(savedAuthors, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update an author")
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateAuthor(@PathVariable int id, @RequestBody Author author) {
-        Author updatedAuthor = authorService.updateAuthor(id, author);
-        return updatedAuthor != null
-                ? ResponseEntity.ok(updatedAuthor)
+    public ResponseEntity<Object> updateAuthor(@PathVariable int id, @RequestBody Authors authors) {
+        Authors updatedAuthors = authorService.updateAuthor(id, authors);
+        return updatedAuthors != null
+                ? ResponseEntity.ok(updatedAuthors)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 

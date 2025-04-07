@@ -3,13 +3,13 @@ package com.example.kotki;
 import java.util.Collection;
 
 public interface IRentalService {
-    Collection<Rental> getAllRentals();
+    Collection<Rentals> getAllRentals();
 
-    Rental getRental(int id);
+    Rentals getRental(int id);
 
-    Rental addRental(RentalRequestDTO dto);
+    Rentals addRental(RentalRequestDTO dto);
 
-    Rental updateRental(int id, RentalRequestDTO rental);
+    Rentals updateRental(int id, RentalRequestDTO rental);
 
     boolean deleteRental(int id);
 }

@@ -2,28 +2,28 @@ package com.example.kotki;
 
 import java.time.LocalDate;
 
-public class Rental {
+public class Rentals {
     private int id;
-    private Reader reader;
-    private Book book;
+    private Readers readers;
+    private Books books;
     private LocalDate rentDate;
     private LocalDate returnDate;
 
-    public Rental(int id, Reader reader, Book book, LocalDate rentDate, LocalDate returnDate) {
+    public Rentals(int id, Readers readers, Books books, LocalDate rentDate, LocalDate returnDate) {
         this.id = id;
-        this.reader = reader;
-        this.book = book;
+        this.readers = readers;
+        this.books = books;
         this.rentDate = rentDate;
         this.returnDate = returnDate;
     }
 
-    public Rental() {}
+    public Rentals() {}
 
     public int getId() { return id; }
-    public Reader getReader() { return reader; }
-    public void setReader(Reader reader) { this.reader = reader; }
-    public Book getBook() { return book; }
-    public void setBook(Book book) { this.book = book; }
+    public Readers getReader() { return readers; }
+    public void setReader(Readers readers) { this.readers = readers; }
+    public Books getBook() { return books; }
+    public void setBook(Books books) { this.books = books; }
     public LocalDate getRentDate() { return rentDate; }
     public void setRentDate(LocalDate rentDate) { this.rentDate = rentDate; }
     public LocalDate getReturnDate() { return returnDate; }

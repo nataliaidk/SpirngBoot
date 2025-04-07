@@ -24,9 +24,9 @@ public class RentalController {
     @Operation(summary = "Get a rental by ID")
     @GetMapping("/{id}")
     public ResponseEntity<Object> getRental(@PathVariable int id) {
-        Rental rental = rentalService.getRental(id);
-        return rental != null
-                ? new ResponseEntity<>(rental, HttpStatus.OK)
+        Rentals rentals = rentalService.getRental(id);
+        return rentals != null
+                ? new ResponseEntity<>(rentals, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -35,7 +35,7 @@ public class RentalController {
     @Operation(summary = "Add a new rental (with existing reader and book)")
     @PostMapping
     public ResponseEntity<Object> addRental(@RequestBody RentalRequestDTO dto) {
-        Rental saved = rentalService.addRental(dto);
+        Rentals saved = rentalService.addRental(dto);
         return saved != null
                 ? new ResponseEntity<>(saved, HttpStatus.CREATED)
                 : new ResponseEntity<>("Reader or Book not found", HttpStatus.BAD_REQUEST);
@@ -44,7 +44,7 @@ public class RentalController {
     @Operation(summary = "Update an existing rental")
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateRental(@PathVariable int id, @RequestBody RentalRequestDTO dto) {
-        Rental updated = rentalService.updateRental(id, dto);
+        Rentals updated = rentalService.updateRental(id, dto);
         return updated != null
                 ? ResponseEntity.ok(updated)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reader or Book not found");

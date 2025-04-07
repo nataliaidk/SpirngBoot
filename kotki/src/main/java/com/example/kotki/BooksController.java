@@ -17,16 +17,16 @@ public class BooksController {
     @Operation(summary = "Add a new book (with existing author)")
     @PostMapping
     public ResponseEntity<Object> addBook(@RequestBody BookRequestDTO dto) {
-        Book book = bookService.addBook(dto);
-        return book != null
-                ? new ResponseEntity<>(book, HttpStatus.CREATED)
+        Books books = bookService.addBook(dto);
+        return books != null
+                ? new ResponseEntity<>(books, HttpStatus.CREATED)
                 : new ResponseEntity<>("Author not found", HttpStatus.BAD_REQUEST);
     }
 
     @Operation(summary = "Update a book")
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateBook(@PathVariable int id, @RequestBody BookRequestDTO dto) {
-        Book updated = bookService.updateBook(id, dto);
+        Books updated = bookService.updateBook(id, dto);
         return updated != null
                 ? ResponseEntity.ok(updated)
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Author not found");
@@ -39,9 +39,9 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBook(@PathVariable int id) {
-        Book book = bookService.getBook(id);
-        return book != null
-                ? new ResponseEntity<>(book, HttpStatus.OK)
+        Books books = bookService.getBook(id);
+        return books != null
+                ? new ResponseEntity<>(books, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

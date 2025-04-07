@@ -1,16 +1,16 @@
 package com.example.kotki;
 
 
-public class Reader {
+public class Readers {
     private int id;
     private String name;
 
-    public Reader(int id, String name) {
+    public Readers(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Reader() {}
+    public Readers() {}
 
     public int getId() {
         return id;

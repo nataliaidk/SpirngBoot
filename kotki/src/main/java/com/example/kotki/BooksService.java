@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 @Service
 public class BooksService implements IBooksService {
-    private static List<Book> booksRepo = new ArrayList<>();
+    private static List<Books> booksRepo = new ArrayList<>();
     private static int currentId = 3;
 
     @Autowired
@@ -18,19 +18,19 @@ public class BooksService implements IBooksService {
 
     @PostConstruct
     private void initBooks() {
-        booksRepo.add(new Book(1, "Potop", authorService.getAuthor(1), 936));
-        booksRepo.add(new Book(2, "Wesele", authorService.getAuthor(2), 150));
-        booksRepo.add(new Book(3, "Dziady", authorService.getAuthor(3), 292));
+        booksRepo.add(new Books(1, "Potop", authorService.getAuthor(1), 936));
+        booksRepo.add(new Books(2, "Wesele", authorService.getAuthor(2), 150));
+        booksRepo.add(new Books(3, "Dziady", authorService.getAuthor(3), 292));
     }
 
     //read - 2 gets
     @Override
-    public Collection<Book> getBooks() {
+    public Collection<Books> getBooks() {
         return booksRepo;
     }
 
     @Override
-    public Book getBook(int id) {
+    public Books getBook(int id) {
         return booksRepo.stream()
                 .filter(b -> b.getId() == id)
                 .findAny()
@@ -39,27 +39,27 @@ public class BooksService implements IBooksService {
 
     //create - 1 post
     //zabezpieczenie/walidacja?
-    public Book addBook(BookRequestDTO dto) {
-        Author author = authorService.getAuthor(dto.getAuthorId());
-        if (author == null) {
+    public Books addBook(BookRequestDTO dto) {
+        Authors authors = authorService.getAuthor(dto.getAuthorId());
+        if (authors == null) {
             return null;
         }
 
-        Book book = new Book(++currentId, dto.getTitle(), author, dto.getPages());
-        booksRepo.add(book);
-        return book;
+        Books books = new Books(++currentId, dto.getTitle(), authors, dto.getPages());
+        booksRepo.add(books);
+        return books;
     }
 
-    public Book updateBook(int id, BookRequestDTO dto) {
-        Author author = authorService.getAuthor(dto.getAuthorId());
-        if (author == null) {
+    public Books updateBook(int id, BookRequestDTO dto) {
+        Authors authors = authorService.getAuthor(dto.getAuthorId());
+        if (authors == null) {
             return null;
         }
 
-        for (Book b : booksRepo) {
+        for (Books b : booksRepo) {
             if (b.getId() == id) {
                 b.setTitle(dto.getTitle());
-                b.setAuthor(author);
+                b.setAuthor(authors);
                 b.setPages(dto.getPages());
                 return b;
             }

@@ -24,23 +24,23 @@ public class ReaderController {
     @Operation(summary = "Get a reader by ID")
     @GetMapping("/{id}")
     public ResponseEntity<Object> getReader(@PathVariable int id) {
-        Reader reader = readerService.getReader(id);
-        return reader != null
-                ? new ResponseEntity<>(reader, HttpStatus.OK)
+        Readers readers = readerService.getReader(id);
+        return readers != null
+                ? new ResponseEntity<>(readers, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Add a new reader")
     @PostMapping
-    public ResponseEntity<Object> addReader(@RequestBody Reader reader) {
-        Reader savedReader = readerService.addReader(reader.getName());
-        return new ResponseEntity<>(savedReader, HttpStatus.CREATED);
+    public ResponseEntity<Object> addReader(@RequestBody Readers readers) {
+        Readers savedReaders = readerService.addReader(readers.getName());
+        return new ResponseEntity<>(savedReaders, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update a reader")
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateReader(@PathVariable int id, @RequestBody Reader reader) {
-        Reader updated = readerService.updateReader(id, reader);
+    public ResponseEntity<Object> updateReader(@PathVariable int id, @RequestBody Readers readers) {
+        Readers updated = readerService.updateReader(id, readers);
         return updated != null
                 ? ResponseEntity.ok(updated)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
