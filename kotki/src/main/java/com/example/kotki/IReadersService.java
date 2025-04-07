@@ -2,7 +2,7 @@ package com.example.kotki;
 
 import java.util.Collection;
 
-public interface IReaderService {
+public interface IReadersService {
 
     public abstract Collection<Readers> getReaders();
     public Readers getReader(int id);

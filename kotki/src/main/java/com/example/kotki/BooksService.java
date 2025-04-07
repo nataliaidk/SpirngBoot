@@ -14,7 +14,7 @@ public class BooksService implements IBooksService {
     private static int currentId = 3;
 
     @Autowired
-    private AuthorService authorService;
+    private AuthorsService authorService;
 
     @PostConstruct
     private void initBooks() {
@@ -39,7 +39,7 @@ public class BooksService implements IBooksService {
 
     //create - 1 post
     //zabezpieczenie/walidacja?
-    public Books addBook(BookRequestDTO dto) {
+    public Books addBook(BooksRequestDTO dto) {
         Authors authors = authorService.getAuthor(dto.getAuthorId());
         if (authors == null) {
             return null;
@@ -50,7 +50,7 @@ public class BooksService implements IBooksService {
         return books;
     }
 
-    public Books updateBook(int id, BookRequestDTO dto) {
+    public Books updateBook(int id, BooksRequestDTO dto) {
         Authors authors = authorService.getAuthor(dto.getAuthorId());
         if (authors == null) {
             return null;

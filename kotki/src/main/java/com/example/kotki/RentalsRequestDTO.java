@@ -2,7 +2,7 @@ package com.example.kotki;
 
 import java.time.LocalDate;
 
-public class RentalRequestDTO {
+public class RentalsRequestDTO {
     private int readerId;
     private int bookId;
     private LocalDate rentDate;

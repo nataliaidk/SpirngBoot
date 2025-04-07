@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-public class AuthorService implements IAuthorService {
+public class AuthorsService implements IAuthorsService {
     private static List<Authors> authorsRepo = new ArrayList<>();
     private static int currentId = 3;
 

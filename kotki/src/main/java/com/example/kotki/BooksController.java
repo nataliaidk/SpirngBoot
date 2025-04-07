@@ -9,14 +9,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/books")
-@Tag(name = "Books Controller", description = "Operations pertaining to books")
+@Tag(name = "Books Controller", description = "Operations for books")
 public class BooksController {
     @Autowired
     IBooksService bookService;
 
     @Operation(summary = "Add a new book (with existing author)")
     @PostMapping
-    public ResponseEntity<Object> addBook(@RequestBody BookRequestDTO dto) {
+    public ResponseEntity<Object> addBook(@RequestBody BooksRequestDTO dto) {
         Books books = bookService.addBook(dto);
         return books != null
                 ? new ResponseEntity<>(books, HttpStatus.CREATED)
@@ -25,7 +25,7 @@ public class BooksController {
 
     @Operation(summary = "Update a book")
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateBook(@PathVariable int id, @RequestBody BookRequestDTO dto) {
+    public ResponseEntity<Object> updateBook(@PathVariable int id, @RequestBody BooksRequestDTO dto) {
         Books updated = bookService.updateBook(id, dto);
         return updated != null
                 ? ResponseEntity.ok(updated)

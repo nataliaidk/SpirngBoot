@@ -2,7 +2,7 @@ package com.example.kotki;
 
 import java.util.Collection;
 
-public interface IAuthorService {
+public interface IAuthorsService {
     public abstract Collection<Authors> getAuthors();
 
     public Authors getAuthor(int id);

@@ -2,14 +2,14 @@ package com.example.kotki;
 
 import java.util.Collection;
 
-public interface IRentalService {
+public interface IRentalsService {
     Collection<Rentals> getAllRentals();
 
     Rentals getRental(int id);
 
-    Rentals addRental(RentalRequestDTO dto);
+    Rentals addRental(RentalsRequestDTO dto);
 
-    Rentals updateRental(int id, RentalRequestDTO rental);
+    Rentals updateRental(int id, RentalsRequestDTO rental);
 
     boolean deleteRental(int id);
 }

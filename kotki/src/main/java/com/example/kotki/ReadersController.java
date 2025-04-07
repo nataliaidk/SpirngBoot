@@ -9,11 +9,11 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/readers")
-@Tag(name = "Readers Controller", description = "Operations related to library readers")
-public class ReaderController {
+@Tag(name = "Readers Controller", description = "Operations for readers")
+public class ReadersController {
 
     @Autowired
-    ReaderService readerService;
+    ReadersService readerService;
 
     @Operation(summary = "Get all readers")
     @GetMapping

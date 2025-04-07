@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-public class ReaderService implements IReaderService {
+public class ReadersService implements IReadersService {
     private static List<Readers> readersRepo = new ArrayList<>();
     private static int currentId = 3;
 

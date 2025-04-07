@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class RentalService implements IRentalService {
+public class RentalsService implements IRentalsService {
 
     @Autowired
-    IReaderService readerService;
+    IReadersService readerService;
 
     @Autowired
     IBooksService bookService;
@@ -27,12 +27,12 @@ public class RentalService implements IRentalService {
                 .orElse(null);
     }
 
-    public Rentals addRental(RentalRequestDTO dto) {
+    public Rentals addRental(RentalsRequestDTO dto) {
         Readers readers = readerService.getReader(dto.getReaderId());
         Books books = bookService.getBook(dto.getBookId());
 
         if (readers == null || books == null) {
-            return null; // można też rzucić wyjątek
+            return null; // można wyjątek rzucić
         }
 
         Rentals rentals = new Rentals(++currentId, readers, books, dto.getRentDate(), dto.getReturnDate());
@@ -40,7 +40,7 @@ public class RentalService implements IRentalService {
         return rentals;
     }
 
-    public Rentals updateRental(int id, RentalRequestDTO dto) {
+    public Rentals updateRental(int id, RentalsRequestDTO dto) {
         Readers readers = readerService.getReader(dto.getReaderId());
         Books books = bookService.getBook(dto.getBookId());
 

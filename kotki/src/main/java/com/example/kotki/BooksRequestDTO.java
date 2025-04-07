@@ -1,6 +1,6 @@
 package com.example.kotki;
 
-public class BookRequestDTO {
+public class BooksRequestDTO {
     private String title;
     private int authorId;
     private int pages;

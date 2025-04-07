@@ -8,10 +8,10 @@ public interface IBooksService {
     public abstract Books getBook(int id);
 
     //create - 1 post
-    public abstract Books addBook(BookRequestDTO dto);
+    public abstract Books addBook(BooksRequestDTO dto);
 
     //update - put, not patch
-    public abstract Books updateBook(int id, BookRequestDTO book);
+    public abstract Books updateBook(int id, BooksRequestDTO book);
 
     //delete - delete
     public abstract boolean deleteBook(int id);

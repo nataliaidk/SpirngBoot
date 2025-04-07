@@ -10,10 +10,10 @@ import io.swagger.v3.oas.annotations.Operation;
 @RestController
 @RequestMapping("/rentals")
 @Tag(name = "Rentals Controller", description = "Manage book rentals")
-public class RentalController {
+public class RentalsController {
 
     @Autowired
-    IRentalService rentalService;
+    IRentalsService rentalService;
 
     @Operation(summary = "Get all rentals")
     @GetMapping
@@ -34,7 +34,7 @@ public class RentalController {
 
     @Operation(summary = "Add a new rental (with existing reader and book)")
     @PostMapping
-    public ResponseEntity<Object> addRental(@RequestBody RentalRequestDTO dto) {
+    public ResponseEntity<Object> addRental(@RequestBody RentalsRequestDTO dto) {
         Rentals saved = rentalService.addRental(dto);
         return saved != null
                 ? new ResponseEntity<>(saved, HttpStatus.CREATED)
@@ -43,7 +43,7 @@ public class RentalController {
 
     @Operation(summary = "Update an existing rental")
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateRental(@PathVariable int id, @RequestBody RentalRequestDTO dto) {
+    public ResponseEntity<Object> updateRental(@PathVariable int id, @RequestBody RentalsRequestDTO dto) {
         Rentals updated = rentalService.updateRental(id, dto);
         return updated != null
                 ? ResponseEntity.ok(updated)

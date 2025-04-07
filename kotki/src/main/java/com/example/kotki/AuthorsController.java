@@ -9,11 +9,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/authors")
-@Tag(name = "Authors Controller", description = "Operations pertaining to authors")
-public class AuthorController {
+@Tag(name = "Authors Controller", description = "Operations for authors")
+public class AuthorsController {
 
     @Autowired
-    IAuthorService authorService;
+    IAuthorsService authorService;
 
     @Operation(summary = "Get all authors")
     @GetMapping
