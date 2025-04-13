@@ -2,8 +2,13 @@ package com.example.kotki;
 
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+
 
 @Service
 public class ReadersService implements IReadersService {
@@ -14,10 +19,18 @@ public class ReadersService implements IReadersService {
         readersRepo.add(new Readers(1, "Jan Kowalski"));
         readersRepo.add(new Readers(2, "Anna Nowak"));
         readersRepo.add(new Readers(3, "Piotr Zieliński"));
+        readersRepo.add(new Readers(4, "Katarzyna Wiśniewska"));
+        readersRepo.add(new Readers(5, "Tomasz Malinowski"));
+        readersRepo.add(new Readers(6, "Monika Nowicka"));
+        readersRepo.add(new Readers(7, "Wojciech Lewandowski"));
     }
 
-    public Collection<Readers> getReaders() {
-        return readersRepo;
+    public Page<Readers> getReaders(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        int start = Math.min((int) pageable.getOffset(), readersRepo.size());
+        int end = Math.min((start + pageable.getPageSize()), readersRepo.size());
+        List<Readers> paginatedList = readersRepo.subList(start, end);
+        return new PageImpl<>(paginatedList, pageable, readersRepo.size());
     }
 
     public Readers getReader(int id) {

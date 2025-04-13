@@ -3,6 +3,10 @@ package com.example.kotki;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
 
 @Service
 public class RentalsService implements IRentalsService {
@@ -16,8 +20,12 @@ public class RentalsService implements IRentalsService {
     private static List<Rentals> rentalsRepo = new ArrayList<>();
     private static int currentId = 0;
 
-    public Collection<Rentals> getAllRentals() {
-        return rentalsRepo;
+    public Page<Rentals> getRentals(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        int start = Math.min((int) pageable.getOffset(), rentalsRepo.size());
+        int end = Math.min((start + pageable.getPageSize()), rentalsRepo.size());
+        List<Rentals> paginatedList = rentalsRepo.subList(start, end);
+        return new PageImpl<>(paginatedList, pageable, rentalsRepo.size());
     }
 
     public Rentals getRental(int id) {

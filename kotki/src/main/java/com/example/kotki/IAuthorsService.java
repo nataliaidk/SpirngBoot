@@ -1,15 +1,12 @@
 package com.example.kotki;
 
-import java.util.Collection;
+import org.springframework.data.domain.Page;
+
 
 public interface IAuthorsService {
-    public abstract Collection<Authors> getAuthors();
-
-    public Authors getAuthor(int id);
-
-    public Authors addAuthor(String name);
-
-    public Authors updateAuthor(int id, Authors authors);
-
-    public boolean deleteAuthor(int id);
+    public abstract Page<Authors> getAuthors(int page, int size);
+    public abstract Authors getAuthor(int id);
+    public abstract Authors addAuthor(String name);
+    public abstract Authors updateAuthor(int id, Authors authors);
+    public abstract boolean deleteAuthor(int id);
 }

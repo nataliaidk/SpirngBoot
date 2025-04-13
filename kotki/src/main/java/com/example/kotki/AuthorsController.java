@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/authors")
@@ -15,10 +16,14 @@ public class AuthorsController {
     @Autowired
     IAuthorsService authorService;
 
-    @Operation(summary = "Get all authors")
+    // GET /authors?page=0&size=5
+
+    @Operation(summary = "Get all authors with pagination")
     @GetMapping
-    public ResponseEntity<Object> getAuthors() {
-        return new ResponseEntity<>(authorService.getAuthors(), HttpStatus.OK);
+    public ResponseEntity<Object> getAuthors(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "5") int size) {
+        Page<Authors> authorsPage = authorService.getAuthors(page, size);
+        return new ResponseEntity<>(authorsPage, HttpStatus.OK);
     }
 
     @Operation(summary = "Get an author by ID")

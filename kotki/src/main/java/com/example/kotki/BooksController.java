@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/books")
@@ -32,9 +33,13 @@ public class BooksController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Author not found");
     }
 
+    //GET /books?page=0&size=5
+
     @GetMapping
-    public ResponseEntity<Object> getAllBooks() {
-        return new ResponseEntity<>(bookService.getBooks(), HttpStatus.OK);
+    public ResponseEntity<Object> getAllBooks(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "5") int size) {
+        Page<Books> booksPage = bookService.getBooks(page, size);
+        return new ResponseEntity<>(booksPage, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

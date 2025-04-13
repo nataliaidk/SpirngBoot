@@ -1,6 +1,7 @@
 package com.example.kotki;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,12 @@ public class ReadersController {
     @Autowired
     ReadersService readerService;
 
-    @Operation(summary = "Get all readers")
+     @Operation(summary = "Get all readers with pagination")
     @GetMapping
-    public ResponseEntity<Object> getReaders() {
-        return new ResponseEntity<>(readerService.getReaders(), HttpStatus.OK);
+    public ResponseEntity<Object> getReaders(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "5") int size) {
+        Page<Readers> readersPage = readerService.getReaders(page, size);
+        return new ResponseEntity<>(readersPage, HttpStatus.OK);
     }
 
     @Operation(summary = "Get a reader by ID")
