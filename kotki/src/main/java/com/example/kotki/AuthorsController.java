@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+import org.springframework.data.domain.Page;
 @RestController
 @RequestMapping("/authors")
 @Tag(name = "Authors Controller", description = "Operations for authors")
@@ -17,9 +17,11 @@ public class AuthorsController {
 
     @Operation(summary = "Get all authors")
     @GetMapping
-    public ResponseEntity<Object> getAuthors() {
-        return new ResponseEntity<>(authorService.getAuthors(), HttpStatus.OK);
-    }
+    public ResponseEntity<Object> getAuthors(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "5") int size)
+    {
+        Page<Authors> authorsPage = authorService.getAuthors(page, size);
+        return new ResponseEntity<>(authorsPage, HttpStatus.OK);
 
     @Operation(summary = "Get an author by ID")
     @GetMapping("/{id}")
