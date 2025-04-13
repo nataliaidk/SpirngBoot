@@ -1,5 +1,5 @@
 package com.example.kotki;
-
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +33,11 @@ public class BooksController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllBooks() {
-        return new ResponseEntity<>(bookService.getBooks(), HttpStatus.OK);
+    public ResponseEntity<Object> getAllBooks(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "5") int size) {
+        Page<Books> booksPage = bookService.getBooks(page, size);
+        return new ResponseEntity<>(booksPage, HttpStatus.OK);
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBook(@PathVariable int id) {
         Books books = bookService.getBook(id);

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
-
+import org.springframework.data.domain.Page;
 @RestController
 @RequestMapping("/rentals")
 @Tag(name = "Rentals Controller", description = "Manage book rentals")
@@ -15,10 +15,13 @@ public class RentalsController {
     @Autowired
     IRentalsService rentalService;
 
-    @Operation(summary = "Get all rentals")
+    // GET /rentals?page=0&size=5
+    @Operation(summary = "Get all rentals with pagination")
     @GetMapping
-    public ResponseEntity<Object> getAllRentals() {
-        return new ResponseEntity<>(rentalService.getAllRentals(), HttpStatus.OK);
+    public ResponseEntity<Object> getRentals(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "5") int size) {
+        Page<Rentals> rentalsPage = rentalService.getRentals(page, size);
+        return new ResponseEntity<>(rentalsPage, HttpStatus.OK);
     }
 
     @Operation(summary = "Get a rental by ID")

@@ -11,6 +11,7 @@
         </option>
       </select>
       <button type="submit">{{ editing ? "Zaktualizuj" : "Dodaj" }}</button>
+      <button v-if="editing" type="button" @click="resetForm">Anuluj</button>
     </form>
 
     <div v-if="error" class="error-message">{{ error }}</div>
@@ -22,6 +23,12 @@
         <button @click="removeBook(book.id)">🗑️</button>
       </li>
     </ul>
+
+    <div class="pagination">
+      <button @click="prevPage" :disabled="page === 0">⬅️ Poprzednia</button>
+      <span>Strona {{ page + 1 }} z {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="page + 1 >= totalPages">➡️ Następna</button>
+    </div>
   </div>
 </template>
 
@@ -37,10 +44,15 @@ const editing = ref(false)
 const editingId = ref(null)
 const error = ref(null)
 
+const page = ref(0)
+const totalPages = ref(1)
+const pageSize = 5
+
 const fetchBooks = async () => {
   try {
-    const res = await getAllBooks()
-    books.value = res.data
+    const res = await getAllBooks(page.value, pageSize) // zakładamy, że getAllBooks(page, size) istnieje
+    books.value = res.data.content
+    totalPages.value = res.data.totalPages
     error.value = null
   } catch (err) {
     error.value = 'Wystąpił błąd podczas ładowania książek'
@@ -50,8 +62,8 @@ const fetchBooks = async () => {
 
 const fetchAuthors = async () => {
   try {
-    const res = await getAllAuthors()
-    authors.value = res.data
+    const res = await getAllAuthors(0,20)
+    authors.value = res.data.content
     error.value = null
   } catch (err) {
     error.value = 'Wystąpił błąd podczas ładowania autorów'
@@ -68,7 +80,7 @@ const handleSaveBook = async () => {
 
     const bookData = {
       title: form.value.title,
-      authorId: form.value.authorId // Zmieniamy strukturę zgodnie z wymaganiami backendu
+      authorId: form.value.authorId
     }
 
     if (editing.value) {
@@ -76,7 +88,7 @@ const handleSaveBook = async () => {
     } else {
       await apiSaveBook(bookData)
     }
-    
+
     resetForm()
     await fetchBooks()
     error.value = null
@@ -96,6 +108,12 @@ const editBook = (book) => {
 const removeBook = async (id) => {
   try {
     await deleteBook(id)
+
+    // cofamy stronę jeśli ostatni element usunięto
+    if (books.value.length === 1 && page.value > 0) {
+      page.value--
+    }
+
     await fetchBooks()
     error.value = null
   } catch (err) {
@@ -111,6 +129,20 @@ const resetForm = () => {
   editingId.value = null
 }
 
+const nextPage = () => {
+  if (page.value + 1 < totalPages.value) {
+    page.value++
+    fetchBooks()
+  }
+}
+
+const prevPage = () => {
+  if (page.value > 0) {
+    page.value--
+    fetchBooks()
+  }
+}
+
 onMounted(() => {
   fetchBooks()
   fetchAuthors()
@@ -121,5 +153,12 @@ onMounted(() => {
 .error-message {
   color: red;
   margin: 10px 0;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 </style>

@@ -13,10 +13,19 @@
     <ul class="readers-list">
       <li v-for="reader in readers" :key="reader.id">
         {{ reader.name }}
-        <button @click="editReader(reader)">✏️</button>
-        <button @click="removeReader(reader.id)">🗑️</button>
+        <div>
+          <button @click="editReader(reader)">✏️</button>
+          <button @click="removeReader(reader.id)">🗑️</button>
+        </div>
       </li>
     </ul>
+
+    <!-- Paginacja -->
+    <div style="margin-top: 1em">
+      <button @click="prevPage" :disabled="page === 0">⬅️ Poprzednia</button>
+      <span>Strona {{ page + 1 }} z {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="page + 1 >= totalPages">➡️ Następna</button>
+    </div>
   </div>
 </template>
 
@@ -35,10 +44,15 @@ const editing = ref(false)
 const editingId = ref(null)
 const error = ref(null)
 
+const page = ref(0)
+const totalPages = ref(1)
+const pageSize = 5
+
 const fetchReaders = async () => {
   try {
-    const res = await getAllReaders()
-    readers.value = res.data
+    const res = await getAllReaders(page.value, pageSize)
+    readers.value = res.data.content
+    totalPages.value = res.data.totalPages
     error.value = null
   } catch (err) {
     error.value = 'Wystąpił błąd podczas ładowania czytelników'
@@ -58,7 +72,7 @@ const handleSaveReader = async () => {
     } else {
       await apiAddReader(form.value.name)
     }
-    
+
     resetForm()
     await fetchReaders()
     error.value = null
@@ -78,6 +92,12 @@ const removeReader = async (id) => {
   try {
     if (confirm('Czy na pewno chcesz usunąć tego czytelnika?')) {
       await deleteReader(id)
+
+      // Jeśli to był ostatni element na stronie – cofnij jedną stronę
+      if (readers.value.length === 1 && page.value > 0) {
+        page.value--
+      }
+
       await fetchReaders()
       error.value = null
     }
@@ -91,6 +111,20 @@ const resetForm = () => {
   form.value.name = ''
   editing.value = false
   editingId.value = null
+}
+
+const nextPage = () => {
+  if (page.value + 1 < totalPages.value) {
+    page.value++
+    fetchReaders()
+  }
+}
+
+const prevPage = () => {
+  if (page.value > 0) {
+    page.value--
+    fetchReaders()
+  }
 }
 
 onMounted(fetchReaders)
@@ -110,8 +144,8 @@ onMounted(fetchReaders)
 .readers-list li {
   padding: 8px;
   margin: 5px 0;
+  border: 1px solid rgb(200,200,200);
   border-radius: 4px;
-  border-color: rgb(200,200,200);
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -1,15 +1,11 @@
 package com.example.kotki;
 
-import java.util.Collection;
+import org.springframework.data.domain.Page;
 
 public interface IRentalsService {
-    Collection<Rentals> getAllRentals();
-
-    Rentals getRental(int id);
-
-    Rentals addRental(RentalsRequestDTO dto);
-
-    Rentals updateRental(int id, RentalsRequestDTO rental);
-
-    boolean deleteRental(int id);
+    public abstract Page<Rentals> getRentals(int page, int size);
+    public abstract Rentals getRental(int id);
+    public abstract Rentals addRental(RentalsRequestDTO dto);
+    public abstract Rentals updateRental(int id, RentalsRequestDTO rental);
+    public abstract boolean deleteRental(int id);
 }

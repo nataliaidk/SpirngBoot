@@ -22,6 +22,7 @@ public class AuthorsController {
     {
         Page<Authors> authorsPage = authorService.getAuthors(page, size);
         return new ResponseEntity<>(authorsPage, HttpStatus.OK);
+    }
 
     @Operation(summary = "Get an author by ID")
     @GetMapping("/{id}")

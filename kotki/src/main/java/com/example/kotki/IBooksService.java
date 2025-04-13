@@ -1,9 +1,11 @@
 package com.example.kotki;
 
 import java.util.Collection;
-public interface IBooksService {
-    public abstract Collection<Books> getBooks();
+import org.springframework.data.domain.Page;
 
+public interface IBooksService {
+
+    public abstract Page<Books> getBooks(int page, int size) ;
     //read - 2 gets
     public abstract Books getBook(int id);
 

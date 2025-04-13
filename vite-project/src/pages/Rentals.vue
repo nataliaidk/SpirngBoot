@@ -62,6 +62,12 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="pagination">
+      <button @click="prevPage" :disabled="page === 0">⬅️ Poprzednia</button>
+      <span>Strona {{ page + 1 }} z {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="page + 1 >= totalPages">➡️ Następna</button>
+    </div>
   </div>
 </template>
 
@@ -79,15 +85,20 @@ import { getAllBooks } from '../services/books'
 const rentals = ref([])
 const readers = ref([])
 const books = ref([])
+const error = ref(null)
+
+const page = ref(0)
+const totalPages = ref(1)
+const pageSize = 5
+
 const form = ref({ 
   readerId: '', 
   bookId: '', 
-  rentDate: new Date().toISOString().split('T')[0], // Domyślnie dzisiejsza data
+  rentDate: new Date().toISOString().split('T')[0],
   returnDate: '' 
 })
 const editing = ref(false)
 const editingId = ref(null)
-const error = ref(null)
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -97,8 +108,9 @@ const formatDate = (dateString) => {
 
 const fetchRentals = async () => {
   try {
-    const res = await getAllRentals()
-    rentals.value = res.data
+    const res = await getAllRentals(page.value, pageSize)
+    rentals.value = res.data.content
+    totalPages.value = res.data.totalPages
     error.value = null
   } catch (err) {
     error.value = 'Wystąpił błąd podczas ładowania wypożyczeń'
@@ -108,8 +120,8 @@ const fetchRentals = async () => {
 
 const fetchReaders = async () => {
   try {
-    const res = await getAllReaders()
-    readers.value = res.data
+    const res = await getAllReaders(0,20)
+    readers.value = res.data.content
   } catch (err) {
     console.error('Błąd ładowania czytelników:', err)
   }
@@ -117,8 +129,8 @@ const fetchReaders = async () => {
 
 const fetchBooks = async () => {
   try {
-    const res = await getAllBooks()
-    books.value = res.data
+    const res = await getAllBooks(0,20)
+    books.value = res.data.content
   } catch (err) {
     console.error('Błąd ładowania książek:', err)
   }
@@ -143,7 +155,7 @@ const handleSaveRental = async () => {
     } else {
       await addRental(rentalData)
     }
-    
+
     resetForm()
     await fetchRentals()
     error.value = null
@@ -166,6 +178,12 @@ const removeRental = async (id) => {
   try {
     if (confirm('Czy na pewno chcesz usunąć to wypożyczenie?')) {
       await deleteRental(id)
+
+      // cofnięcie strony jeśli ostatni element został usunięty
+      if (rentals.value.length === 1 && page.value > 0) {
+        page.value--
+      }
+
       await fetchRentals()
       error.value = null
     }
@@ -176,12 +194,28 @@ const removeRental = async (id) => {
 }
 
 const resetForm = () => {
-  form.value.readerId = ''
-  form.value.bookId = ''
-  form.value.rentDate = new Date().toISOString().split('T')[0] // Reset do dzisiejszej daty
-  form.value.returnDate = ''
+  form.value = {
+    readerId: '',
+    bookId: '',
+    rentDate: new Date().toISOString().split('T')[0],
+    returnDate: ''
+  }
   editing.value = false
   editingId.value = null
+}
+
+const nextPage = () => {
+  if (page.value + 1 < totalPages.value) {
+    page.value++
+    fetchRentals()
+  }
+}
+
+const prevPage = () => {
+  if (page.value > 0) {
+    page.value--
+    fetchRentals()
+  }
 }
 
 onMounted(() => {
@@ -203,13 +237,12 @@ onMounted(() => {
   margin-top: 20px;
 }
 
-.rentals-table th, .rentals-table td {
+.rentals-table th,
+.rentals-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
-
-
 
 .form-group {
   margin-bottom: 15px;
@@ -221,7 +254,9 @@ onMounted(() => {
   font-weight: bold;
 }
 
-select, input[type="date"], button {
+select,
+input[type="date"],
+button {
   padding: 8px;
   margin-right: 10px;
   border: 1px solid #ddd;
@@ -245,5 +280,12 @@ button:hover {
 
 .form-actions {
   margin-top: 20px;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 </style>
