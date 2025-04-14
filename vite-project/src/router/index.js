@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../layouts/MainLayout.vue";
-import Home from "../pages/Home.vue";
-import Books from "../pages/Books.vue";
-import Authors from "../pages/Authors.vue";
-import Readers from "../pages/Readers.vue";
-import Rentals from "../pages/Rentals.vue";
+import Home from "../components/Home.vue";
+import Books from "../components/Books.vue";
+import Authors from "../components/Authors.vue";
+import Readers from "../components/Readers.vue";
+import Rentals from "../components/Rentals.vue";
 
 const routes = [
   {
