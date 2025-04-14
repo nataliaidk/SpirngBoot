@@ -15,6 +15,9 @@ public class AuthorsController {
     @Autowired
     IAuthorsService authorService;
 
+    @Autowired
+    IBooksService booksService;
+
     @Operation(summary = "Get all authors")
     @GetMapping
     public ResponseEntity<Object> getAuthors(@RequestParam(defaultValue = "0") int page,
@@ -52,6 +55,12 @@ public class AuthorsController {
     @Operation(summary = "Delete an author")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable int id) {
+        for(Books book : booksService.getAllBooks()){
+            if(book.getAuthor().getId() == id){
+                //book with an author exists so return an error that we are unable to delete this
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
         boolean deleted = authorService.deleteAuthor(id);
         return deleted
                 ? ResponseEntity.noContent().build()

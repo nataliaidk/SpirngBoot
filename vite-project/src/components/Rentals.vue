@@ -292,7 +292,7 @@ onMounted(() => {
   border: 0px solid #ddd;
   padding: 8px;
   text-align: left;
-  padding: 5px 30px;
+  padding: 0.2rem 1.2rem;
   text-align: center;
 }
 
@@ -325,6 +325,8 @@ input[type="date"] {
 button {
   margin-left: 5px;
   cursor: pointer;
+  height: 2.3rem;
+  font-size: 0.9em;
 }
 
 .form-actions {

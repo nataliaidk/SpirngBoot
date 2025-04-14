@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
-
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +32,11 @@ public class BooksService implements IBooksService {
         booksRepo.add(new Books(9, "Book 9", authorService.getAuthor(7), 180));
         booksRepo.add(new Books(10, "Book 10", authorService.getAuthor(1), 320));
         booksRepo.add(new Books(11, "Book 11", authorService.getAuthor(2), 180));
+    }
+
+    @Override
+    public Collection<Books> getAllBooks() {
+        return booksRepo;
     }
 
     //read - 2 gets

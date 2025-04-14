@@ -47,6 +47,7 @@ const authors = ref([]);
 const form = ref({ name: "" });
 const editing = ref(false);
 const editingId = ref(null);
+const error = ref("");
 
 const page = ref(0);
 const totalPages = ref(1);
@@ -75,12 +76,21 @@ const editAuthor = (author) => {
 };
 
 const removeAuthor = async (id) => {
-  await deleteAuthor(id);
-  //cofnij o strone jesli usunieto ostatni elem
-  if (authors.value.length === 1 && page.value > 0) {
-    page.value--;
+  try {
+    error.value = "";
+    await deleteAuthor(id);
+
+    if (authors.value.length === 1 && page.value > 0) {
+      page.value--;
+    }
+    fetchAuthors();
+  } catch (err) {
+    if (err.response && err.response.status === 400) {
+      error.value = "Nie można usunąć autora – ma przypisane książki.";
+    } else {
+      error.value = "Wystąpił błąd przy usuwaniu autora.";
+    }
   }
-  fetchAuthors();
 };
 
 const resetForm = () => {
